@@ -10,11 +10,22 @@ using System.Windows.Forms;
 
 namespace SnakeAndMath
 {
-    public partial class Form1 : Form
+    public partial class frmMainMenu : Form
     {
-        public Form1()
+        public frmMainMenu()
         {
-            InitializeComponent();
+            InitializeComponent(); //DO NOT TOUCH
+        }
+
+        private void btnPlay_Click(object sender, EventArgs e) //play button
+        {
+            frmSelectLevel selectLevelForm = new frmSelectLevel();
+            selectLevelForm.ShowDialog(); //opening selectLevelform
+        }
+
+        private void btnExit_Click(object sender, EventArgs e)
+        {
+            this.Close(); //Close app
         }
     }
 }
