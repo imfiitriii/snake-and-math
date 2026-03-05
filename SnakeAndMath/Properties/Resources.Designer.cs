@@ -133,6 +133,16 @@ namespace SnakeAndMath.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap dice_canva_removebg_preview__1_ {
+            get {
+                object obj = ResourceManager.GetObject("dice_canva-removebg-preview (1)", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap exit_button {
             get {
                 object obj = ResourceManager.GetObject("exit button", resourceCulture);
@@ -156,6 +166,36 @@ namespace SnakeAndMath.Properties {
         internal static System.Drawing.Bitmap play_button {
             get {
                 object obj = ResourceManager.GetObject("play button", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Snake_and_Ladder_No_Background {
+            get {
+                object obj = ResourceManager.GetObject("Snake and Ladder No Background", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Snake_and_Ladder_No_Background1 {
+            get {
+                object obj = ResourceManager.GetObject("Snake and Ladder No Background1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Snake_And_Math_Title {
+            get {
+                object obj = ResourceManager.GetObject("Snake And Math Title", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

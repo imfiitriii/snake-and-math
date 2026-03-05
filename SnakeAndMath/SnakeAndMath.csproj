@@ -128,5 +128,17 @@
   <ItemGroup>
     <None Include="Resources\button hard.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Snake and Ladder No Background.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Snake and Ladder No Background1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Snake And Math Title.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\dice_canva-removebg-preview %281%29.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
