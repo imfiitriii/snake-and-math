@@ -16,5 +16,20 @@ namespace SnakeAndMath
         {
             InitializeComponent();
         }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblPlayer_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnDice_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
