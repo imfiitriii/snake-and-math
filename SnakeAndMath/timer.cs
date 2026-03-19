@@ -10,27 +10,37 @@ namespace SnakeAndMath
     internal class PlayerTimer
     {
         private Timer timer;
-        private int timeLeft;
+        public int TimeLeft { get; private set; }
+        public bool IsRunning { get; private set; }
+
+
+        public double Interval { get; set; } = 1000;
 
         public event Action TimeUp;
         public event Action<int> TimeChanged;
 
         public void Start(int seconds)
         {
-            timeLeft = seconds;
-            timer = new Timer(1000);
+            timer?.Stop();
+
+            TimeLeft = seconds;
+            IsRunning = true;
+
+            timer = new Timer(Interval);
             timer.Elapsed += OnTimeTick;
             timer.Start();
         }
 
         private void OnTimeTick(object sender, ElapsedEventArgs e)
         {
-            timeLeft--;
-            TimeChanged?.Invoke(timeLeft);
+            TimeLeft--;
 
-            if (timeLeft <= 0)
+            TimeChanged?.Invoke(TimeLeft);
+
+            if (TimeLeft <= 0)
             {
                 timer.Stop();
+                IsRunning = false;
                 TimeUp?.Invoke();
             }
         }
@@ -38,6 +48,7 @@ namespace SnakeAndMath
         public void Stop()
         {
             timer?.Stop();
+            IsRunning = false;
         }
     }
 }
