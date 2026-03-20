@@ -39,7 +39,6 @@ namespace SnakeAndMath
 
         }
 
-        GameBoardUI gameBoard = new GameBoardUI();
         private void frmGameSession_Load(object sender, EventArgs e)
         {
             lblLevel.Text = Level;
