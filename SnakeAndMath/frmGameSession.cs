@@ -39,16 +39,9 @@ namespace SnakeAndMath
 
         }
 
-        GameBoard gameBoard = new GameBoard();
+        GameBoardUI gameBoard = new GameBoardUI();
         private void frmGameSession_Load(object sender, EventArgs e)
         {
-            pnlGameBoard.Controls.Clear();     // optional: remove previous form
-            gameBoard.TopLevel = false;         // make it behave like a control
-            gameBoard.Dock = DockStyle.Fill;    // fill the panel
-            pnlGameBoard.Controls.Add(gameBoard);     // add form to panel
-            gameBoard.Show();                   // display the form
-
-            //set label text to the level selected in the previous form
             lblLevel.Text = Level;
         }
     }

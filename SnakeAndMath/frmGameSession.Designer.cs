@@ -38,6 +38,22 @@
             ((System.ComponentModel.ISupportInitialize)(this.pcbGameTitle)).BeginInit();
             this.SuspendLayout();
             // 
+            // btnDice
+            // 
+            btnDice.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            btnDice.BackgroundImage = global::SnakeAndMath.Properties.Resources.dice_canva_removebg_preview__1_;
+            btnDice.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            btnDice.FlatAppearance.BorderSize = 0;
+            btnDice.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gray;
+            btnDice.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            btnDice.ForeColor = System.Drawing.Color.White;
+            btnDice.Location = new System.Drawing.Point(974, 343);
+            btnDice.Name = "btnDice";
+            btnDice.Size = new System.Drawing.Size(93, 93);
+            btnDice.TabIndex = 6;
+            btnDice.UseVisualStyleBackColor = true;
+            btnDice.Click += new System.EventHandler(this.btnDice_Click);
+            // 
             // lblLevel
             // 
             this.lblLevel.BackColor = System.Drawing.Color.Transparent;
@@ -78,22 +94,6 @@
             this.lblPlayer.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.lblPlayer.Click += new System.EventHandler(this.lblPlayer_Click);
             // 
-            // btnDice
-            // 
-            btnDice.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            btnDice.BackgroundImage = global::SnakeAndMath.Properties.Resources.dice_canva_removebg_preview__1_;
-            btnDice.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            btnDice.FlatAppearance.BorderSize = 0;
-            btnDice.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gray;
-            btnDice.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            btnDice.ForeColor = System.Drawing.Color.White;
-            btnDice.Location = new System.Drawing.Point(974, 343);
-            btnDice.Name = "btnDice";
-            btnDice.Size = new System.Drawing.Size(93, 93);
-            btnDice.TabIndex = 6;
-            btnDice.UseVisualStyleBackColor = true;
-            btnDice.Click += new System.EventHandler(this.btnDice_Click);
-            // 
             // pcbGameTitle
             // 
             this.pcbGameTitle.Image = global::SnakeAndMath.Properties.Resources.Snake_And_Math_Title;
@@ -106,6 +106,8 @@
             // 
             // pnlGameBoard
             // 
+            this.pnlGameBoard.BackgroundImage = global::SnakeAndMath.Properties.Resources.Snake_and_Ladder_No_Background1;
+            this.pnlGameBoard.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pnlGameBoard.Location = new System.Drawing.Point(1, 3);
             this.pnlGameBoard.Name = "pnlGameBoard";
             this.pnlGameBoard.Size = new System.Drawing.Size(850, 816);
