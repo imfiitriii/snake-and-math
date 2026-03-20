@@ -12,12 +12,16 @@ namespace SnakeAndMath
         private Timer timer;
         public int TimeLeft { get; private set; }
         public bool IsRunning { get; private set; }
-
-
         public double Interval { get; set; } = 1000;
 
         public event Action TimeUp;
         public event Action<int> TimeChanged;
+
+        public PlayerTimer()
+        {
+            Interval = 1000;
+            IsRunning = false;
+        }
 
         public void Start(int seconds)
         {
