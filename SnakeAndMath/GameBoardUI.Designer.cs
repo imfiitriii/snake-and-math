@@ -1,6 +1,6 @@
 ﻿namespace SnakeAndMath
 {
-    partial class GameBoard
+    partial class GameBoardUI
     {
         /// <summary>
         /// Required designer variable.
