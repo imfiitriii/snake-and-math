@@ -40,7 +40,7 @@
             this.btnPlay.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btnPlay.FlatAppearance.BorderSize = 0;
             this.btnPlay.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnPlay.Font = new System.Drawing.Font("Wanted M54", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnPlay.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnPlay.Location = new System.Drawing.Point(554, 452);
             this.btnPlay.Name = "btnPlay";
             this.btnPlay.Size = new System.Drawing.Size(338, 87);
@@ -56,7 +56,7 @@
             this.btnExit.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btnExit.FlatAppearance.BorderSize = 0;
             this.btnExit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnExit.Font = new System.Drawing.Font("Wanted M54", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnExit.Location = new System.Drawing.Point(554, 583);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(338, 87);
@@ -77,8 +77,7 @@
             this.MaximizeBox = false;
             this.Name = "frmMainMenu";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Snake And Math";
-            this.ResumeLayout(false);
+            this.Text = "yyyy";
             this.ResumeLayout(false);
 
         }
