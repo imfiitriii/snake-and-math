@@ -50,7 +50,6 @@ namespace SnakeAndMath
             lblQuestion.Text = currentQuestion.DisplayQUestion(id, Level); // set the question label text to the question retrieved from the Question class based on the random ID and level(new)
         }
 
-        GameBoard gameBoard = new GameBoard();
         private void frmGameSession_Load(object sender, EventArgs e)
         {
             pnlGameBoard.Controls.Clear();     // optional: remove previous form

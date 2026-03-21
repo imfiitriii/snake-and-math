@@ -111,6 +111,8 @@
             // 
             // pnlGameBoard
             // 
+            this.pnlGameBoard.BackgroundImage = global::SnakeAndMath.Properties.Resources.Snake_and_Ladder_No_Background1;
+            this.pnlGameBoard.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pnlGameBoard.Location = new System.Drawing.Point(1, 3);
             this.pnlGameBoard.Name = "pnlGameBoard";
             this.pnlGameBoard.Size = new System.Drawing.Size(850, 816);
