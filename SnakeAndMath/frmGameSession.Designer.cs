@@ -34,9 +34,30 @@
             this.lblPlayer = new System.Windows.Forms.Label();
             this.pcbGameTitle = new System.Windows.Forms.PictureBox();
             this.pnlGameBoard = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.diceLbl = new System.Windows.Forms.Label();
+            this.lblQuestion = new System.Windows.Forms.Label();
+            this.txtAnswer = new System.Windows.Forms.TextBox();
+            this.btnSubmit = new System.Windows.Forms.Button();
             btnDice = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pcbGameTitle)).BeginInit();
             this.SuspendLayout();
+            // 
+            // btnDice
+            // 
+            btnDice.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            btnDice.BackgroundImage = global::SnakeAndMath.Properties.Resources.dice_canva_removebg_preview__1_;
+            btnDice.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            btnDice.FlatAppearance.BorderSize = 0;
+            btnDice.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gray;
+            btnDice.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            btnDice.ForeColor = System.Drawing.Color.White;
+            btnDice.Location = new System.Drawing.Point(974, 343);
+            btnDice.Name = "btnDice";
+            btnDice.Size = new System.Drawing.Size(93, 93);
+            btnDice.TabIndex = 6;
+            btnDice.UseVisualStyleBackColor = true;
+            btnDice.Click += new System.EventHandler(this.btnDice_Click);
             // 
             // lblLevel
             // 
@@ -78,22 +99,6 @@
             this.lblPlayer.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.lblPlayer.Click += new System.EventHandler(this.lblPlayer_Click);
             // 
-            // btnDice
-            // 
-            btnDice.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            btnDice.BackgroundImage = global::SnakeAndMath.Properties.Resources.dice_canva_removebg_preview__1_;
-            btnDice.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            btnDice.FlatAppearance.BorderSize = 0;
-            btnDice.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gray;
-            btnDice.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            btnDice.ForeColor = System.Drawing.Color.White;
-            btnDice.Location = new System.Drawing.Point(974, 343);
-            btnDice.Name = "btnDice";
-            btnDice.Size = new System.Drawing.Size(93, 93);
-            btnDice.TabIndex = 6;
-            btnDice.UseVisualStyleBackColor = true;
-            btnDice.Click += new System.EventHandler(this.btnDice_Click);
-            // 
             // pcbGameTitle
             // 
             this.pcbGameTitle.Image = global::SnakeAndMath.Properties.Resources.Snake_And_Math_Title;
@@ -111,12 +116,74 @@
             this.pnlGameBoard.Size = new System.Drawing.Size(850, 816);
             this.pnlGameBoard.TabIndex = 7;
             // 
+            // label1
+            // 
+            this.label1.Font = new System.Drawing.Font("Ravie", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.Color.White;
+            this.label1.Location = new System.Drawing.Point(887, 497);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(203, 41);
+            this.label1.TabIndex = 8;
+            this.label1.Text = "Dice Rolled :";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // diceLbl
+            // 
+            this.diceLbl.BackColor = System.Drawing.Color.Transparent;
+            this.diceLbl.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.diceLbl.Font = new System.Drawing.Font("Ravie", 13.8F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.diceLbl.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.diceLbl.Location = new System.Drawing.Point(1096, 498);
+            this.diceLbl.Name = "diceLbl";
+            this.diceLbl.Size = new System.Drawing.Size(47, 40);
+            this.diceLbl.TabIndex = 9;
+            this.diceLbl.Text = "?";
+            this.diceLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblQuestion
+            // 
+            this.lblQuestion.Font = new System.Drawing.Font("Modern No. 20", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblQuestion.ForeColor = System.Drawing.Color.White;
+            this.lblQuestion.Location = new System.Drawing.Point(885, 562);
+            this.lblQuestion.Name = "lblQuestion";
+            this.lblQuestion.Size = new System.Drawing.Size(289, 84);
+            this.lblQuestion.TabIndex = 10;
+            this.lblQuestion.Text = "-";
+            this.lblQuestion.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // txtAnswer
+            // 
+            this.txtAnswer.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtAnswer.Location = new System.Drawing.Point(940, 683);
+            this.txtAnswer.Name = "txtAnswer";
+            this.txtAnswer.Size = new System.Drawing.Size(180, 30);
+            this.txtAnswer.TabIndex = 11;
+            // 
+            // btnSubmit
+            // 
+            this.btnSubmit.BackColor = System.Drawing.Color.Aqua;
+            this.btnSubmit.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnSubmit.Font = new System.Drawing.Font("Microsoft YaHei", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSubmit.ForeColor = System.Drawing.Color.Black;
+            this.btnSubmit.Location = new System.Drawing.Point(983, 730);
+            this.btnSubmit.Name = "btnSubmit";
+            this.btnSubmit.Size = new System.Drawing.Size(98, 35);
+            this.btnSubmit.TabIndex = 12;
+            this.btnSubmit.Text = "Submit";
+            this.btnSubmit.UseVisualStyleBackColor = false;
+            this.btnSubmit.Click += new System.EventHandler(this.btnSubmit_Click);
+            // 
             // frmGameSession
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(0)))), ((int)(((byte)(40)))));
             this.ClientSize = new System.Drawing.Size(1205, 859);
+            this.Controls.Add(this.btnSubmit);
+            this.Controls.Add(this.txtAnswer);
+            this.Controls.Add(this.lblQuestion);
+            this.Controls.Add(this.diceLbl);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.pnlGameBoard);
             this.Controls.Add(btnDice);
             this.Controls.Add(this.lblPlayer);
@@ -132,6 +199,7 @@
             this.Load += new System.EventHandler(this.frmGameSession_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pcbGameTitle)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -141,5 +209,10 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label lblPlayer;
         private System.Windows.Forms.Panel pnlGameBoard;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label diceLbl;
+        private System.Windows.Forms.Label lblQuestion;
+        private System.Windows.Forms.TextBox txtAnswer;
+        private System.Windows.Forms.Button btnSubmit;
     }
 }

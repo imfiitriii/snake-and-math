@@ -36,7 +36,7 @@ namespace SnakeAndMath
 
         private void btnEasy_Click(object sender, EventArgs e)
         {
-            gameSession.Level = "Easy"; ;
+            gameSession.Level = "Easy"; 
             gameSession.ShowDialog(); //open game window
             this.Close();
             
