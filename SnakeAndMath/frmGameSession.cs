@@ -47,16 +47,11 @@ namespace SnakeAndMath
         private void LoadQuestion(int id)
         {
             currentQuestion = new Question(id, Level); // create a new instance of the Question class(new)
-            lblQuestion.Text = currentQuestion.DisplayQUestion(id, Level); // set the question label text to the question retrieved from the Question class based on the random ID and level(new)
+            //lblQuestion.Text = currentQuestion.DisplayQUestion(id, Level); // set the question label text to the question retrieved from the Question class based on the random ID and level(new)
         }
 
         private void frmGameSession_Load(object sender, EventArgs e)
         {
-            pnlGameBoard.Controls.Clear();     // optional: remove previous form
-            gameBoard.TopLevel = false;         // make it behave like a control
-            gameBoard.Dock = DockStyle.Fill;    // fill the panel
-            pnlGameBoard.Controls.Add(gameBoard);     // add form to panel
-            gameBoard.Show();                   // display the form
             id = rnd.Next(1, 21);              // select a random question ID between 1 and 20 (new)
 
             //set label text to the level selected in the previous form
@@ -64,20 +59,6 @@ namespace SnakeAndMath
 
             LoadQuestion(id);
          
-        }
-
-        private void btnSubmit_Click(object sender, EventArgs e)// event handler for the submit button click event(new)
-        {
-            answer = txtAnswer.Text;
-            if (currentQuestion.CheckAnswer(answer))// check if the user's answer is correct using the CheckAnswer method of the Question class
-            {
-                MessageBox.Show("Correct!");
-
-            }
-            else
-            {
-                MessageBox.Show("Incorrect!");
-            }
         }
     }
 }
