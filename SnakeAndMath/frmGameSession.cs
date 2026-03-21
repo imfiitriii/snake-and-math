@@ -47,18 +47,30 @@ namespace SnakeAndMath
         private void LoadQuestion(int id)
         {
             currentQuestion = new Question(id, Level); // create a new instance of the Question class(new)
-            //lblQuestion.Text = currentQuestion.DisplayQUestion(id, Level); // set the question label text to the question retrieved from the Question class based on the random ID and level(new)
+            lblQuestion.Text = currentQuestion.DisplayQUestion(id, Level); // set the question label text to the question retrieved from the Question class based on the random ID and level(new)
         }
 
         private void frmGameSession_Load(object sender, EventArgs e)
         {
-            id = rnd.Next(1, 21);              // select a random question ID between 1 and 20 (new)
+            id = rnd.Next(1, 21);    // select a random question ID between 1 and 20 (new)
 
             //set label text to the level selected in the previous form
             lblLevel.Text = Level;
 
             LoadQuestion(id);
-         
+        }
+
+        private void btnSubmit_Click(object sender, EventArgs e)
+        {
+            answer = txtAnswer.Text;
+            if (currentQuestion.CheckAnswer(answer))
+            {
+                MessageBox.Show("Correct! You can move forward.");
+            }
+            else
+            {
+                MessageBox.Show("Incorrect! You have to move backward.");
+            }
         }
     }
 }

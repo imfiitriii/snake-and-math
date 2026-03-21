@@ -9,7 +9,7 @@ namespace SnakeAndMath
 {
     public class Question
     {
-        private string connStr =@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\Users\azfar\OneDrive\Documents\Database3.accdb;Persist Security Info=False;";
+        private string connStr =@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=|DataDirectory|\Question.accdb";
         private int id;
         private string questionText;
         private string trueAnswer;
@@ -27,30 +27,30 @@ namespace SnakeAndMath
             Level = level;
         }
 
-        //public string DisplayQUestion(int ID,string Level)
-        //{
-        //    using (OleDbConnection conn = new OleDbConnection(connStr))
-        //    {
-        //        conn.Open();
+        public string DisplayQUestion(int ID, string Level)
+        {
+            using (OleDbConnection conn = new OleDbConnection(connStr))
+            {
+                conn.Open();
 
-        //        string query = $"SELECT * FROM [{Level}] WHERE ID = ?";
-        //        OleDbCommand cmd = new OleDbCommand(query, conn);
-        //        cmd.Parameters.AddWithValue("?", id);
+                string query = $"SELECT * FROM [{Level}] WHERE ID = ?";
+                OleDbCommand cmd = new OleDbCommand(query, conn);
+                cmd.Parameters.AddWithValue("?", id);
 
-        //        OleDbDataReader reader = cmd.ExecuteReader();
+                OleDbDataReader reader = cmd.ExecuteReader();
 
-        //        if (reader.Read())
-        //        {
-        //            questionText = reader["Question"].ToString();
-        //            trueAnswer = reader["Answer"].ToString();
-        //        }
-        //        return "Question : " + questionText;
-        //    }
-        //}
+                if (reader.Read())
+                {
+                    questionText = reader["Question"].ToString();
+                    trueAnswer = reader["Answer"].ToString();
+                }
+                return "Question : " + questionText;
+            }
+        }
 
-        //public bool CheckAnswer(string userAnswer)
-        //{
-        //    return userAnswer.Trim() == trueAnswer.Trim();
-        //}
+        public bool CheckAnswer(string userAnswer)
+        {
+            return userAnswer.Trim() == trueAnswer.Trim();
+        }
     }
 }
