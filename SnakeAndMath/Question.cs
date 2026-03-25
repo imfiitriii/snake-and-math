@@ -98,6 +98,12 @@ namespace SnakeAndMath
 
             return userAnswer.Trim().Equals(trueAnswer.Trim(), StringComparison.OrdinalIgnoreCase);
         }
+
+        // ADD THIS
+        public string GetCorrectAnswer()
+        {
+            return trueAnswer;
+        }
     }
 }
 //public class Question
