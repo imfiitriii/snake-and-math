@@ -41,5 +41,12 @@ namespace SnakeAndMath
             this.Close();
             
         }
+
+        private void btn4Player_Click(object sender, EventArgs e)
+        {
+            gameSession.Level = "4 Player";
+            gameSession.ShowDialog(); //open game window
+            this.Close();
+        }
     }
 }
