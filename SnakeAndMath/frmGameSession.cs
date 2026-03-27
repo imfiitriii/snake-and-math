@@ -45,6 +45,9 @@ namespace SnakeAndMath
             get { return players[currentPlayerIndex]; }
         }
 
+        private SnakeShield snakeProtection;
+        private int ConsecutiveCorrectAnswers = 0;
+
         public frmGameSession()
         {
             InitializeComponent();
@@ -446,11 +449,22 @@ namespace SnakeAndMath
             if (lastAnswerCorrect)
             {
                 UpdateStatus("Correct answer! Now roll the dice.");
+                ConsecutiveCorrectAnswers++;
+
+                if (ConsecutiveCorrectAnswers == 5)
+                {
+                    snakeProtection = new SnakeShield();
+                    snakeProtection.Activate(CurrentPlayer, board);
+                    MessageBox.Show("Congratulations! You received a snake shield");
+                }
+                label3.Text = "Correct answer! Now roll the dice.";
                 MessageBox.Show("Correct! Press the Dice button to roll.");
             }
             else
             {
                 UpdateStatus("Wrong answer! Now roll the dice.");
+                ConsecutiveCorrectAnswers = 0;
+                label3.Text = "Wrong answer! Now roll the dice.";
                 MessageBox.Show("Wrong! Press the Dice button to roll.");
             }
         }
@@ -496,6 +510,14 @@ namespace SnakeAndMath
             int checkedPosition = board.CheckPosition(CurrentPlayer.Position);
 
             if (checkedPosition != CurrentPlayer.Position)
+            if (snakeProtection != null && snakeProtection.IsActive && checkedPosition < CurrentPlayer.Position)
+            {
+                MessageBox.Show("You are protected from the snake!");
+                snakeProtection.Deactivate();
+                checkedPosition = CurrentPlayer.Position;
+            }
+
+            if (checkedPosition != CurrentPlayer.Position)
             {
                 int beforeSnakeOrLadder = CurrentPlayer.Position;
 
@@ -509,6 +531,8 @@ namespace SnakeAndMath
 
             UpdateStatus("Position: " + CurrentPlayer.Position);
 
+            if (board.IsGameFinished(CurrentPlayer))
+            
             if (board.IsGameFinished(CurrentPlayer))
             {
                 StopTurnTimer();
