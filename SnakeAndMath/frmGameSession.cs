@@ -26,6 +26,9 @@ namespace SnakeAndMath
         private Control boardHost;
         private const int GridSize = 10;
 
+        private SnakeShield snakeProtection;
+        private int ConsecutiveCorrectAnswers = 0;
+
         public frmGameSession()
         {
             InitializeComponent();
@@ -210,11 +213,20 @@ namespace SnakeAndMath
 
             if (lastAnswerCorrect)
             {
+                ConsecutiveCorrectAnswers++;
+
+                if (ConsecutiveCorrectAnswers == 5)
+                {
+                    snakeProtection = new SnakeShield();
+                    snakeProtection.Activate(player1, board);
+                    MessageBox.Show("Congratulations! You received a snake shield");
+                }
                 label3.Text = "Correct answer! Now roll the dice.";
                 MessageBox.Show("Correct! Press the Dice button to roll.");
             }
             else
             {
+                ConsecutiveCorrectAnswers = 0;
                 label3.Text = "Wrong answer! Now roll the dice.";
                 MessageBox.Show("Wrong! Press the Dice button to roll.");
             }
@@ -258,6 +270,13 @@ namespace SnakeAndMath
 
             int checkedPosition = board.CheckPosition(player1.Position);
 
+            if (snakeProtection != null && snakeProtection.IsActive && checkedPosition < player1.Position)
+            {
+                MessageBox.Show("You are protected from the snake!");
+                snakeProtection.Deactivate();
+                checkedPosition = player1.Position;
+            }
+
             if (checkedPosition != player1.Position)
             {
                 int beforeSnakeOrLadder = player1.Position;
@@ -266,6 +285,7 @@ namespace SnakeAndMath
 
             label3.Text = "Position: " + player1.Position;
 
+            
             if (board.IsGameFinished(player1))
             {
                 MessageBox.Show(player1.Name + " wins the game!");
