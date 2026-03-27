@@ -63,6 +63,16 @@ namespace SnakeAndMath.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap _4_player_mode_button {
+            get {
+                object obj = ResourceManager.GetObject("4-player mode button", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap background_2 {
             get {
                 object obj = ResourceManager.GetObject("background 2", resourceCulture);
