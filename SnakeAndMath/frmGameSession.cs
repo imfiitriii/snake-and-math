@@ -9,6 +9,7 @@ namespace SnakeAndMath
 {
     public partial class frmGameSession : Form
     {
+        private bool formClosed = false;
         public string Level { get; set; }
 
         public int id = 0;
@@ -381,6 +382,7 @@ namespace SnakeAndMath
 
         private async void RunBotTurn()
         {
+        
             if (!CurrentPlayer.IsBot)
                 return;
 
@@ -396,6 +398,8 @@ namespace SnakeAndMath
             waitingForAnswer = false;
             waitingForDiceRoll = true;
 
+            if (formClosed == true)
+                return;
             if (lastAnswerCorrect)
                 UpdateStatus(CurrentPlayer.Name + " answered correctly. Rolling dice...");
             else
@@ -596,6 +600,11 @@ namespace SnakeAndMath
 
         private void lblToken_Click(object sender, EventArgs e)
         {
+        }
+
+        private void frmGameSession_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            formClosed = true;
         }
     }
 }

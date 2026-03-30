@@ -30,7 +30,6 @@
         {
             this.btnDice = new System.Windows.Forms.Button();
             this.lblLevel = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             this.lblPlayer = new System.Windows.Forms.Label();
             this.pcbGameTitle = new System.Windows.Forms.PictureBox();
             this.pnlGameBoard = new System.Windows.Forms.Panel();
@@ -78,29 +77,16 @@
             this.lblLevel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.lblLevel.Click += new System.EventHandler(this.lblLevel_Click_1);
             // 
-            // label2
-            // 
-            this.label2.Font = new System.Drawing.Font("Ravie", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(688, 207);
-            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(152, 33);
-            this.label2.TabIndex = 4;
-            this.label2.Text = "Player : ";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.label2.Click += new System.EventHandler(this.label2_Click);
-            // 
             // lblPlayer
             // 
             this.lblPlayer.BackColor = System.Drawing.Color.Transparent;
             this.lblPlayer.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.lblPlayer.Font = new System.Drawing.Font("Ravie", 13.8F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblPlayer.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.lblPlayer.Location = new System.Drawing.Point(805, 208);
+            this.lblPlayer.Location = new System.Drawing.Point(653, 209);
             this.lblPlayer.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblPlayer.Name = "lblPlayer";
-            this.lblPlayer.Size = new System.Drawing.Size(35, 32);
+            this.lblPlayer.Size = new System.Drawing.Size(240, 32);
             this.lblPlayer.TabIndex = 5;
             this.lblPlayer.Text = "1";
             this.lblPlayer.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -227,7 +213,6 @@
             this.Controls.Add(this.pnlGameBoard);
             this.Controls.Add(this.btnDice);
             this.Controls.Add(this.lblPlayer);
-            this.Controls.Add(this.label2);
             this.Controls.Add(this.lblLevel);
             this.Controls.Add(this.pcbGameTitle);
             this.ForeColor = System.Drawing.Color.Transparent;
@@ -236,7 +221,8 @@
             this.MaximizeBox = false;
             this.Name = "frmGameSession";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Snake and Math - {difficulty}";
+            this.Text = "Snake and Math";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmGameSession_FormClosing);
             this.Load += new System.EventHandler(this.frmGameSession_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pcbGameTitle)).EndInit();
             this.pnlGameBoard.ResumeLayout(false);
@@ -249,7 +235,6 @@
         #endregion
         private System.Windows.Forms.PictureBox pcbGameTitle;
         private System.Windows.Forms.Label lblLevel;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label lblPlayer;
         private System.Windows.Forms.Panel pnlGameBoard;
         private System.Windows.Forms.Label label1;
