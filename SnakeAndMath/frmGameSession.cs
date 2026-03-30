@@ -39,10 +39,16 @@ namespace SnakeAndMath
         private Color[] tokenColors = { Color.Gold, Color.DeepSkyBlue, Color.LimeGreen, Color.OrangeRed };
 
         private string currentStatusMessage = "";
+        private string currentQuestionLevel = "";
 
         private Player CurrentPlayer
         {
             get { return players[currentPlayerIndex]; }
+        }
+
+        private bool IsFourPlayerMode
+        {
+            get { return Level == "4 Player"; }
         }
 
         public frmGameSession()
@@ -50,9 +56,21 @@ namespace SnakeAndMath
             InitializeComponent();
         }
 
+        private string GetQuestionLevelForCurrentMode()
+        {
+            if (IsFourPlayerMode)
+            {
+                string[] levels = { "Easy", "Medium", "Hard" };
+                return levels[rnd.Next(0, levels.Length)];
+            }
+
+            return Level;
+        }
+
         private void LoadQuestion(int id)
         {
-            currentQuestion = new Question(id, Level);
+            currentQuestionLevel = GetQuestionLevelForCurrentMode();
+            currentQuestion = new Question(id, currentQuestionLevel);
         }
 
         private void LoadRandomQuestion()
@@ -60,6 +78,11 @@ namespace SnakeAndMath
             id = rnd.Next(1, 21);
             LoadQuestion(id);
             lblQuestion.Text = currentQuestion.DisplayQuestion();
+
+            if (IsFourPlayerMode)
+                lblLevel.Text = "Mode: 4 Player | Question: " + currentQuestionLevel;
+            else
+                lblLevel.Text = Level;
         }
 
         public void ChangeLabelText(string message)
@@ -116,7 +139,6 @@ namespace SnakeAndMath
             if (isAnimating)
                 return;
 
-            // human timeout
             if (!CurrentPlayer.IsBot)
             {
                 if (!waitingForAnswer)
@@ -135,7 +157,6 @@ namespace SnakeAndMath
                 return;
             }
 
-            // bot timeout fallback
             if (CurrentPlayer.IsBot && waitingForAnswer)
             {
                 lastAnswerCorrect = false;
@@ -196,21 +217,33 @@ namespace SnakeAndMath
         {
             players = new List<Player>();
 
-            Player player1 = new Player(1, "Player 1");
-            player1.SetPosition(1);
-            players.Add(player1);
+            if (IsFourPlayerMode)
+            {
+                for (int i = 1; i <= 4; i++)
+                {
+                    Player player = new Player(i, "Player " + i);
+                    player.SetPosition(1);
+                    players.Add(player);
+                }
+            }
+            else
+            {
+                Player player1 = new Player(1, "Player 1");
+                player1.SetPosition(1);
+                players.Add(player1);
 
-            Bot bot1 = new Bot(2, "Bot 1", Level);
-            bot1.SetPosition(1);
-            players.Add(bot1);
+                Bot bot1 = new Bot(2, "Bot 1", Level);
+                bot1.SetPosition(1);
+                players.Add(bot1);
 
-            Bot bot2 = new Bot(3, "Bot 2", Level);
-            bot2.SetPosition(1);
-            players.Add(bot2);
+                Bot bot2 = new Bot(3, "Bot 2", Level);
+                bot2.SetPosition(1);
+                players.Add(bot2);
 
-            Bot bot3 = new Bot(4, "Bot 3", Level);
-            bot3.SetPosition(1);
-            players.Add(bot3);
+                Bot bot3 = new Bot(4, "Bot 3", Level);
+                bot3.SetPosition(1);
+                players.Add(bot3);
+            }
         }
 
         private void InitializeTokens()
@@ -401,7 +434,6 @@ namespace SnakeAndMath
             InitializePlayers();
             InitializeTokens();
 
-            lblLevel.Text = Level;
             LoadRandomQuestion();
             UpdateTurnUI();
             UpdateAllPlayerLabels();
