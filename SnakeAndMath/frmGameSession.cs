@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,14 +9,19 @@ namespace SnakeAndMath
 {
     public partial class frmGameSession : Form
     {
+        private bool formClosed = false;
         public string Level { get; set; }
+
         public int id = 0;
         public string answer;
         private Question currentQuestion;
         private Random rnd = new Random();
 
         private GameBoard board;
-        private Player player1;
+        private List<Player> players;
+        private int currentPlayerIndex = 0;
+
+        private PlayerTimer questionTimer;
 
         private int currentDiceValue = 0;
         private bool waitingForAnswer = true;
@@ -26,6 +32,26 @@ namespace SnakeAndMath
         private Control boardHost;
         private const int GridSize = 10;
 
+        private const int HumanQuestionTime = 15;
+        private const int BotThinkingTime = 3;
+
+        private Label[] tokenLabels;
+        private string[] tokenSymbols = { "★", "●", "▲", "■" };
+        private Color[] tokenColors = { Color.Gold, Color.DeepSkyBlue, Color.LimeGreen, Color.OrangeRed };
+
+        private string currentStatusMessage = "";
+        private string currentQuestionLevel = "";
+
+        private Player CurrentPlayer
+        {
+            get { return players[currentPlayerIndex]; }
+        }
+
+        private bool IsFourPlayerMode
+        {
+            get { return Level == "4 Player"; }
+        }
+
         private SnakeShield snakeProtection;
         private int ConsecutiveCorrectAnswers = 0;
 
@@ -34,9 +60,21 @@ namespace SnakeAndMath
             InitializeComponent();
         }
 
+        private string GetQuestionLevelForCurrentMode()
+        {
+            if (IsFourPlayerMode)
+            {
+                string[] levels = { "Easy", "Medium", "Hard" };
+                return levels[rnd.Next(0, levels.Length)];
+            }
+
+            return Level;
+        }
+
         private void LoadQuestion(int id)
         {
-            currentQuestion = new Question(id, Level);
+            currentQuestionLevel = GetQuestionLevelForCurrentMode();
+            currentQuestion = new Question(id, currentQuestionLevel);
         }
 
         private void LoadRandomQuestion()
@@ -44,6 +82,11 @@ namespace SnakeAndMath
             id = rnd.Next(1, 21);
             LoadQuestion(id);
             lblQuestion.Text = currentQuestion.DisplayQuestion();
+
+            if (IsFourPlayerMode)
+                lblLevel.Text = "Mode: 4 Player | Question: " + currentQuestionLevel;
+            else
+                lblLevel.Text = Level;
         }
 
         public void ChangeLabelText(string message)
@@ -51,9 +94,85 @@ namespace SnakeAndMath
             lblLevel.Text = message;
         }
 
+        private void UpdateStatus(string message)
+        {
+            currentStatusMessage = message;
+
+            int timeLeft = 0;
+            if (questionTimer != null)
+                timeLeft = questionTimer.TimeLeft;
+
+            label3.Text = currentStatusMessage + " | Time Left: " + timeLeft + "s";
+        }
+
+        private void StartTurnTimer(int seconds)
+        {
+            if (questionTimer == null)
+                return;
+
+            questionTimer.Stop();
+            questionTimer.Start(seconds);
+            UpdateStatus(currentStatusMessage);
+        }
+
+        private void StopTurnTimer()
+        {
+            if (questionTimer != null)
+                questionTimer.Stop();
+        }
+
+        private void OnQuestionTimeChanged(int timeLeft)
+        {
+            if (InvokeRequired)
+            {
+                BeginInvoke(new Action<int>(OnQuestionTimeChanged), timeLeft);
+                return;
+            }
+
+            label3.Text = currentStatusMessage + " | Time Left: " + timeLeft + "s";
+        }
+
+        private void OnQuestionTimeUp()
+        {
+            if (InvokeRequired)
+            {
+                BeginInvoke(new Action(OnQuestionTimeUp));
+                return;
+            }
+
+            if (isAnimating)
+                return;
+
+            if (!CurrentPlayer.IsBot)
+            {
+                if (!waitingForAnswer)
+                    return;
+
+                lastAnswerCorrect = false;
+                waitingForAnswer = false;
+                waitingForDiceRoll = true;
+
+                btnSubmit.Enabled = false;
+                btnDice.Enabled = true;
+                txtAnswer.Enabled = false;
+
+                UpdateStatus(CurrentPlayer.Name + " ran out of time. Roll the dice.");
+                MessageBox.Show(CurrentPlayer.Name + " ran out of time. The answer is counted as wrong.");
+                return;
+            }
+
+            if (CurrentPlayer.IsBot && waitingForAnswer)
+            {
+                lastAnswerCorrect = false;
+                waitingForAnswer = false;
+                waitingForDiceRoll = true;
+                UpdateStatus(CurrentPlayer.Name + " ran out of time. Rolling dice...");
+                btnDice_Click(btnDice, EventArgs.Empty);
+            }
+        }
+
         private Control FindBoardHost()
         {
-            // Try likely names first
             var namedBoard = this.Controls
                 .Cast<Control>()
                 .FirstOrDefault(c =>
@@ -63,7 +182,6 @@ namespace SnakeAndMath
             if (namedBoard != null)
                 return namedBoard;
 
-            // Otherwise pick the largest PictureBox that is NOT the title
             var biggestPictureBox = this.Controls
                 .OfType<PictureBox>()
                 .Where(p => !p.Name.ToLower().Contains("title"))
@@ -73,7 +191,6 @@ namespace SnakeAndMath
             if (biggestPictureBox != null)
                 return biggestPictureBox;
 
-            // Fallback: use the form itself
             return this;
         }
 
@@ -88,7 +205,6 @@ namespace SnakeAndMath
             int rowFromBottom = zeroBased / GridSize;
             int col = zeroBased % GridSize;
 
-            // Zig-zag pattern
             if (rowFromBottom % 2 == 1)
                 col = GridSize - 1 - col;
 
@@ -101,42 +217,123 @@ namespace SnakeAndMath
             return new Point(x, y);
         }
 
-        private void EnsureTokenStyle()
+        private void InitializePlayers()
         {
-            lblToken.Text = "★";
-            lblToken.Font = new Font("Segoe UI Symbol", 14, FontStyle.Bold);
-            lblToken.ForeColor = Color.Gold;
-            lblToken.AutoSize = true;
+            players = new List<Player>();
 
-            if (boardHost != null && lblToken.Parent != boardHost)
+            if (IsFourPlayerMode)
             {
-                lblToken.Parent = boardHost;
-                lblToken.BackColor = Color.Transparent;
+                for (int i = 1; i <= 4; i++)
+                {
+                    Player player = new Player(i, "Player " + i);
+                    player.SetPosition(1);
+                    players.Add(player);
+                }
+            }
+            else
+            {
+                Player player1 = new Player(1, "Player 1");
+                player1.SetPosition(1);
+                players.Add(player1);
+
+                Bot bot1 = new Bot(2, "Bot 1", Level);
+                bot1.SetPosition(1);
+                players.Add(bot1);
+
+                Bot bot2 = new Bot(3, "Bot 2", Level);
+                bot2.SetPosition(1);
+                players.Add(bot2);
+
+                Bot bot3 = new Bot(4, "Bot 3", Level);
+                bot3.SetPosition(1);
+                players.Add(bot3);
+            }
+        }
+
+        private void InitializeTokens()
+        {
+            tokenLabels = new Label[4];
+
+            if (lblToken != null)
+                tokenLabels[0] = lblToken;
+
+            for (int i = 1; i < 4; i++)
+            {
+                Label newToken = new Label();
+                newToken.AutoSize = true;
+                newToken.BackColor = Color.Transparent;
+                newToken.Name = "lblToken" + (i + 1);
+                tokenLabels[i] = newToken;
+
+                if (boardHost != null)
+                    newToken.Parent = boardHost;
+                else
+                    this.Controls.Add(newToken);
             }
 
-            lblToken.BringToFront();
+            for (int i = 0; i < 4; i++)
+            {
+                if (tokenLabels[i] != null)
+                {
+                    tokenLabels[i].Text = tokenSymbols[i];
+                    tokenLabels[i].Font = new Font("Segoe UI Symbol", 14, FontStyle.Bold);
+                    tokenLabels[i].ForeColor = tokenColors[i];
+                    tokenLabels[i].AutoSize = true;
+
+                    if (boardHost != null && tokenLabels[i].Parent != boardHost)
+                    {
+                        tokenLabels[i].Parent = boardHost;
+                        tokenLabels[i].BackColor = Color.Transparent;
+                    }
+
+                    tokenLabels[i].BringToFront();
+                }
+            }
         }
 
-        private void MovePlayerLabel()
+        private void UpdateAllPlayerLabels()
         {
-            if (boardHost == null)
+            if (boardHost == null || players == null || tokenLabels == null)
                 return;
 
-            EnsureTokenStyle();
+            var groupedPositions = players
+                .Select((player, index) => new { player, index })
+                .GroupBy(x => x.player.Position);
 
-            Point center = GetCellCenterInBoard(player1.Position);
+            foreach (var group in groupedPositions)
+            {
+                Point center = GetCellCenterInBoard(group.Key);
+                int offsetIndex = 0;
 
-            lblToken.Left = center.X - (lblToken.Width / 2);
-            lblToken.Top = center.Y - (lblToken.Height / 2);
-            lblToken.BringToFront();
+                foreach (var item in group)
+                {
+                    Label token = tokenLabels[item.index];
+                    if (token == null)
+                        continue;
+
+                    int offsetX = 0;
+                    int offsetY = 0;
+
+                    if (offsetIndex == 0) { offsetX = -10; offsetY = -10; }
+                    else if (offsetIndex == 1) { offsetX = 10; offsetY = -10; }
+                    else if (offsetIndex == 2) { offsetX = -10; offsetY = 10; }
+                    else if (offsetIndex == 3) { offsetX = 10; offsetY = 10; }
+
+                    token.Left = center.X - (token.Width / 2) + offsetX;
+                    token.Top = center.Y - (token.Height / 2) + offsetY;
+                    token.BringToFront();
+
+                    offsetIndex++;
+                }
+            }
         }
 
-        private async Task AnimatePlayerMovement(int fromPosition, int toPosition)
+        private async Task AnimatePlayerMovement(Player player, int fromPosition, int toPosition)
         {
             if (fromPosition == toPosition)
             {
-                player1.SetPosition(toPosition);
-                MovePlayerLabel();
+                player.SetPosition(toPosition);
+                UpdateAllPlayerLabels();
                 return;
             }
 
@@ -150,43 +347,114 @@ namespace SnakeAndMath
                  step > 0 ? pos <= toPosition : pos >= toPosition;
                  pos += step)
             {
-                player1.SetPosition(pos);
-                MovePlayerLabel();
-                label3.Text = "Position: " + player1.Position;
+                player.SetPosition(pos);
+                UpdateAllPlayerLabels();
+                UpdateStatus("Position: " + player.Position);
                 await Task.Delay(180);
             }
 
             isAnimating = false;
         }
 
-        private void frmGameSession_Load(object sender, EventArgs e)
+        private void UpdateTurnUI()
         {
-            board = new GameBoard();
-            player1 = new Player(1, "Player 1");
-            player1.SetPosition(1);
-
-            boardHost = FindBoardHost();
-
-            lblLevel.Text = Level;
-            lblPlayer.Text = "Player : " + player1.Name;
+            lblPlayer.Text = "Player : " + CurrentPlayer.Name;
             diceLbl.Text = "";
-            label3.Text = "Answer the question first.";
             txtAnswer.Clear();
 
             waitingForAnswer = true;
             waitingForDiceRoll = false;
 
-            btnSubmit.Enabled = true;
-            btnDice.Enabled = false;
+            if (CurrentPlayer.IsBot)
+            {
+                btnSubmit.Enabled = false;
+                btnDice.Enabled = false;
+                txtAnswer.Enabled = false;
+                UpdateStatus(CurrentPlayer.Name + " is answering...");
+                StartTurnTimer(BotThinkingTime);
+            }
+            else
+            {
+                btnSubmit.Enabled = true;
+                btnDice.Enabled = false;
+                txtAnswer.Enabled = true;
+                UpdateStatus(CurrentPlayer.Name + ", answer the question first.");
+                StartTurnTimer(HumanQuestionTime);
+            }
+        }
 
-            EnsureTokenStyle();
+        private async void RunBotTurn()
+        {
+        
+            if (!CurrentPlayer.IsBot)
+                return;
+
+            await Task.Delay(BotThinkingTime * 1000);
+
+            if (!CurrentPlayer.IsBot || !waitingForAnswer)
+                return;
+
+            StopTurnTimer();
+
+            lastAnswerCorrect = CurrentPlayer.SubmitAnswer("", currentQuestion.GetCorrectAnswer());
+
+            waitingForAnswer = false;
+            waitingForDiceRoll = true;
+
+            if (formClosed == true)
+                return;
+            if (lastAnswerCorrect)
+                UpdateStatus(CurrentPlayer.Name + " answered correctly. Rolling dice...");
+            else
+                UpdateStatus(CurrentPlayer.Name + " answered wrongly. Rolling dice...");
+
+            await Task.Delay(800);
+
+            btnDice_Click(btnDice, EventArgs.Empty);
+        }
+
+        private void NextTurn()
+        {
+            StopTurnTimer();
+
+            currentPlayerIndex++;
+            if (currentPlayerIndex >= players.Count)
+                currentPlayerIndex = 0;
+
             LoadRandomQuestion();
-            MovePlayerLabel();
+            UpdateTurnUI();
+            UpdateAllPlayerLabels();
+
+            if (CurrentPlayer.IsBot)
+                RunBotTurn();
+        }
+
+        private void frmGameSession_Load(object sender, EventArgs e)
+        {
+            board = new GameBoard();
+            boardHost = FindBoardHost();
+
+            questionTimer = new PlayerTimer();
+            questionTimer.TimeChanged += OnQuestionTimeChanged;
+            questionTimer.TimeUp += OnQuestionTimeUp;
+
+            InitializePlayers();
+            InitializeTokens();
+
+            LoadRandomQuestion();
+            UpdateTurnUI();
+            UpdateAllPlayerLabels();
+
+            if (CurrentPlayer.IsBot)
+                RunBotTurn();
         }
 
         private void btnSubmit_Click(object sender, EventArgs e)
         {
             if (isAnimating)
+                return;
+
+            if (CurrentPlayer.IsBot)
                 return;
 
             if (!waitingForAnswer)
@@ -203,6 +471,8 @@ namespace SnakeAndMath
                 return;
             }
 
+            StopTurnTimer();
+
             lastAnswerCorrect = currentQuestion.CheckAnswer(userAnswer);
 
             waitingForAnswer = false;
@@ -210,6 +480,7 @@ namespace SnakeAndMath
 
             btnSubmit.Enabled = false;
             btnDice.Enabled = true;
+            txtAnswer.Enabled = false;
 
             if (lastAnswerCorrect)
             {
@@ -218,14 +489,16 @@ namespace SnakeAndMath
                 if (ConsecutiveCorrectAnswers == 5)
                 {
                     snakeProtection = new SnakeShield();
-                    snakeProtection.Activate(player1, board);
+                    snakeProtection.Activate(CurrentPlayer, board);
                     MessageBox.Show("Congratulations! You received a snake shield");
                 }
                 label3.Text = "Correct answer! Now roll the dice.";
+                UpdateStatus("Correct answer! Now roll the dice.");
                 MessageBox.Show("Correct! Press the Dice button to roll.");
             }
             else
             {
+                UpdateStatus("Wrong answer! Now roll the dice.");
                 ConsecutiveCorrectAnswers = 0;
                 label3.Text = "Wrong answer! Now roll the dice.";
                 MessageBox.Show("Wrong! Press the Dice button to roll.");
@@ -243,10 +516,12 @@ namespace SnakeAndMath
                 return;
             }
 
-            currentDiceValue = rnd.Next(1, 7);
+            StopTurnTimer();
+
+            currentDiceValue = CurrentPlayer.RollDice();
             diceLbl.Text = currentDiceValue.ToString();
 
-            int oldPosition = player1.Position;
+            int oldPosition = CurrentPlayer.Position;
             int newPosition;
 
             if (lastAnswerCorrect)
@@ -255,7 +530,7 @@ namespace SnakeAndMath
                 if (newPosition > 100)
                     newPosition = 100;
 
-                MessageBox.Show("Dice rolled " + currentDiceValue + ". Move forward " + currentDiceValue + " steps.");
+                MessageBox.Show(CurrentPlayer.Name + " rolled " + currentDiceValue + ". Move forward " + currentDiceValue + " steps.");
             }
             else
             {
@@ -263,47 +538,58 @@ namespace SnakeAndMath
                 if (newPosition < 1)
                     newPosition = 1;
 
-                MessageBox.Show("Dice rolled " + currentDiceValue + ". Move backward " + currentDiceValue + " steps.");
+                MessageBox.Show(CurrentPlayer.Name + " rolled " + currentDiceValue + ". Move backward " + currentDiceValue + " steps.");
             }
 
-            await AnimatePlayerMovement(oldPosition, newPosition);
+            await AnimatePlayerMovement(CurrentPlayer, oldPosition, newPosition);
 
-            int checkedPosition = board.CheckPosition(player1.Position);
+            int checkedPosition = board.CheckPosition(CurrentPlayer.Position);
 
-            if (snakeProtection != null && snakeProtection.IsActive && checkedPosition < player1.Position)
+            if (snakeProtection != null && snakeProtection.IsActive && checkedPosition < CurrentPlayer.Position)
             {
                 MessageBox.Show("You are protected from the snake!");
                 snakeProtection.Deactivate();
-                checkedPosition = player1.Position;
+                checkedPosition = CurrentPlayer.Position;
             }
 
-            if (checkedPosition != player1.Position)
+            if (checkedPosition != CurrentPlayer.Position)
+            if (checkedPosition != CurrentPlayer.Position)
             {
-                int beforeSnakeOrLadder = player1.Position;
-                await AnimatePlayerMovement(beforeSnakeOrLadder, checkedPosition);
+                int beforeSnakeOrLadder = CurrentPlayer.Position;
+
+                if (checkedPosition > beforeSnakeOrLadder)
+                    UpdateStatus(CurrentPlayer.Name + " climbed a ladder!");
+                else
+                    UpdateStatus(CurrentPlayer.Name + " got eaten by a snake!");
+
+                await AnimatePlayerMovement(CurrentPlayer, beforeSnakeOrLadder, checkedPosition);
             }
 
-            label3.Text = "Position: " + player1.Position;
+            UpdateStatus("Position: " + CurrentPlayer.Position);
 
-            
-            if (board.IsGameFinished(player1))
+            if (board.IsGameFinished(CurrentPlayer))
             {
-                MessageBox.Show(player1.Name + " wins the game!");
+                StopTurnTimer();
+                MessageBox.Show(CurrentPlayer.Name + " wins the game!");
                 btnSubmit.Enabled = false;
                 btnDice.Enabled = false;
+                txtAnswer.Enabled = false;
                 return;
             }
 
-            txtAnswer.Clear();
-            LoadRandomQuestion();
+            NextTurn();
+        }
 
-            waitingForAnswer = true;
-            waitingForDiceRoll = false;
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            if (questionTimer != null)
+            {
+                questionTimer.Stop();
+                questionTimer.TimeChanged -= OnQuestionTimeChanged;
+                questionTimer.TimeUp -= OnQuestionTimeUp;
+            }
 
-            btnSubmit.Enabled = true;
-            btnDice.Enabled = false;
-
-            label3.Text = "Answer the next question.";
+            base.OnFormClosing(e);
         }
 
         private void label2_Click(object sender, EventArgs e)
@@ -336,6 +622,11 @@ namespace SnakeAndMath
 
         private void lblToken_Click(object sender, EventArgs e)
         {
+        }
+
+        private void frmGameSession_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            formClosed = true;
         }
     }
 }

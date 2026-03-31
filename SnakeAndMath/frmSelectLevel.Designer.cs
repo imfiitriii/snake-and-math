@@ -31,6 +31,7 @@
             this.btnEasy = new System.Windows.Forms.Button();
             this.btnMedium = new System.Windows.Forms.Button();
             this.btnHard = new System.Windows.Forms.Button();
+            this.btn4Player = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnEasy
@@ -42,9 +43,9 @@
             this.btnEasy.FlatAppearance.BorderSize = 0;
             this.btnEasy.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnEasy.Font = new System.Drawing.Font("Wanted M54", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnEasy.Location = new System.Drawing.Point(94, 150);
+            this.btnEasy.Location = new System.Drawing.Point(69, 175);
             this.btnEasy.Name = "btnEasy";
-            this.btnEasy.Size = new System.Drawing.Size(211, 324);
+            this.btnEasy.Size = new System.Drawing.Size(175, 296);
             this.btnEasy.TabIndex = 1;
             this.btnEasy.UseVisualStyleBackColor = false;
             this.btnEasy.Click += new System.EventHandler(this.btnEasy_Click);
@@ -58,9 +59,9 @@
             this.btnMedium.FlatAppearance.BorderSize = 0;
             this.btnMedium.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMedium.Font = new System.Drawing.Font("Wanted M54", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnMedium.Location = new System.Drawing.Point(374, 150);
+            this.btnMedium.Location = new System.Drawing.Point(284, 175);
             this.btnMedium.Name = "btnMedium";
-            this.btnMedium.Size = new System.Drawing.Size(211, 324);
+            this.btnMedium.Size = new System.Drawing.Size(175, 296);
             this.btnMedium.TabIndex = 2;
             this.btnMedium.UseVisualStyleBackColor = false;
             this.btnMedium.Click += new System.EventHandler(this.btnMedium_Click);
@@ -74,12 +75,28 @@
             this.btnHard.FlatAppearance.BorderSize = 0;
             this.btnHard.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnHard.Font = new System.Drawing.Font("Wanted M54", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnHard.Location = new System.Drawing.Point(654, 150);
+            this.btnHard.Location = new System.Drawing.Point(499, 175);
             this.btnHard.Name = "btnHard";
-            this.btnHard.Size = new System.Drawing.Size(211, 324);
+            this.btnHard.Size = new System.Drawing.Size(175, 296);
             this.btnHard.TabIndex = 3;
             this.btnHard.UseVisualStyleBackColor = false;
             this.btnHard.Click += new System.EventHandler(this.btnHard_Click);
+            // 
+            // btn4Player
+            // 
+            this.btn4Player.BackColor = System.Drawing.Color.Transparent;
+            this.btn4Player.BackgroundImage = global::SnakeAndMath.Properties.Resources._4_player_mode_button;
+            this.btn4Player.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btn4Player.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.btn4Player.FlatAppearance.BorderSize = 0;
+            this.btn4Player.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn4Player.Font = new System.Drawing.Font("Wanted M54", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn4Player.Location = new System.Drawing.Point(714, 175);
+            this.btn4Player.Name = "btn4Player";
+            this.btn4Player.Size = new System.Drawing.Size(175, 296);
+            this.btn4Player.TabIndex = 4;
+            this.btn4Player.UseVisualStyleBackColor = false;
+            this.btn4Player.Click += new System.EventHandler(this.btn4Player_Click);
             // 
             // frmSelectLevel
             // 
@@ -88,6 +105,7 @@
             this.BackgroundImage = global::SnakeAndMath.Properties.Resources.background_select_level;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(947, 531);
+            this.Controls.Add(this.btn4Player);
             this.Controls.Add(this.btnHard);
             this.Controls.Add(this.btnMedium);
             this.Controls.Add(this.btnEasy);
@@ -106,5 +124,6 @@
         private System.Windows.Forms.Button btnEasy;
         private System.Windows.Forms.Button btnMedium;
         private System.Windows.Forms.Button btnHard;
+        private System.Windows.Forms.Button btn4Player;
     }
 }
