@@ -553,7 +553,6 @@ namespace SnakeAndMath
             }
 
             if (checkedPosition != CurrentPlayer.Position)
-            if (checkedPosition != CurrentPlayer.Position)
             {
                 int beforeSnakeOrLadder = CurrentPlayer.Position;
 
