@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Data.OleDb;
 
 namespace SnakeAndMath
 {
     public class Question
     {
+        private string connStr = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=|DataDirectory|\Question.accdb;";//Persist Security Info=False;
         private int id;
         private string questionText;
         private string trueAnswer;
@@ -25,70 +27,23 @@ namespace SnakeAndMath
 
         public string DisplayQuestion()
         {
-            GenerateQuestion();
-            return questionText;
-        }
-
-        private void GenerateQuestion()
-        {
-            int a = 0, b = 0, answer = 0;
-            string op = "";
-
-            Random rnd = new Random(ID + DateTime.Now.Millisecond);
-
-            switch (Level)
+            using (OleDbConnection conn = new OleDbConnection(connStr))
             {
-                case "Easy":
-                    a = rnd.Next(1, 10);
-                    b = rnd.Next(1, 10);
-                    op = rnd.Next(0, 2) == 0 ? "+" : "-";
+                conn.Open();
 
-                    if (op == "+")
-                        answer = a + b;
-                    else
-                        answer = a - b;
+                string query = $"SELECT * FROM [{Level}] WHERE ID = ?";
+                OleDbCommand cmd = new OleDbCommand(query, conn);
+                cmd.Parameters.AddWithValue("?", id);
 
-                    questionText = $"{a} {op} {b} = ?";
-                    break;
+                OleDbDataReader reader = cmd.ExecuteReader();
 
-                case "Medium":
-                    a = rnd.Next(5, 20);
-                    b = rnd.Next(1, 10);
-                    op = rnd.Next(0, 2) == 0 ? "*" : "+";
-
-                    if (op == "*")
-                        answer = a * b;
-                    else
-                        answer = a + b;
-
-                    questionText = $"{a} {op} {b} = ?";
-                    break;
-
-                case "Hard":
-                    a = rnd.Next(10, 50);
-                    b = rnd.Next(1, 10);
-                    op = rnd.Next(0, 3) == 0 ? "/" : "*";
-
-                    if (op == "/")
-                    {
-                        int temp = a * b;
-                        answer = a;
-                        questionText = $"{temp} / {b} = ?";
-                    }
-                    else
-                    {
-                        answer = a * b;
-                        questionText = $"{a} * {b} = ?";
-                    }
-                    break;
-
-                default:
-                    questionText = $"Invalid Level: {Level}";
-                    trueAnswer = "";
-                    return;
+                if (reader.Read())
+                {
+                    questionText = reader["Question"].ToString();
+                    trueAnswer = reader["Answer"].ToString();
+                }
+                return "Question : " + questionText;
             }
-
-            trueAnswer = answer.ToString();
         }
 
         public bool CheckAnswer(string userAnswer)
@@ -128,28 +83,75 @@ namespace SnakeAndMath
 
 //public string DisplayQUestion(int ID,string Level)
 //{
-//    using (OleDbConnection conn = new OleDbConnection(connStr))
-//    {
-//        conn.Open();
-
-//        string query = $"SELECT * FROM [{Level}] WHERE ID = ?";
-//        OleDbCommand cmd = new OleDbCommand(query, conn);
-//        cmd.Parameters.AddWithValue("?", id);
-
-//        OleDbDataReader reader = cmd.ExecuteReader();
-
-//        if (reader.Read())
-//        {
-//            questionText = reader["Question"].ToString();
-//            trueAnswer = reader["Answer"].ToString();
-//        }
-//        return "Question : " + questionText;
-//    }
+//    GenerateQuestion();
+//    return questionText;
 //}
 
 //public bool CheckAnswer(string userAnswer)
 //{
 //    return userAnswer.Trim() == trueAnswer.Trim();
+//}
+
+//private void GenerateQuestion()
+//{
+//    int a = 0, b = 0, answer = 0;
+//    string op = "";
+
+//    Random rnd = new Random(ID + DateTime.Now.Millisecond);
+
+//    switch (Level)
+//    {
+//        case "Easy":
+//            a = rnd.Next(1, 10);
+//            b = rnd.Next(1, 10);
+//            op = rnd.Next(0, 2) == 0 ? "+" : "-";
+
+//            if (op == "+")
+//                answer = a + b;
+//            else
+//                answer = a - b;
+
+//            questionText = $"{a} {op} {b} = ?";
+//            break;
+
+//        case "Medium":
+//            a = rnd.Next(5, 20);
+//            b = rnd.Next(1, 10);
+//            op = rnd.Next(0, 2) == 0 ? "*" : "+";
+
+//            if (op == "*")
+//                answer = a * b;
+//            else
+//                answer = a + b;
+
+//            questionText = $"{a} {op} {b} = ?";
+//            break;
+
+//        case "Hard":
+//            a = rnd.Next(10, 50);
+//            b = rnd.Next(1, 10);
+//            op = rnd.Next(0, 3) == 0 ? "/" : "*";
+
+//            if (op == "/")
+//            {
+//                int temp = a * b;
+//                answer = a;
+//                questionText = $"{temp} / {b} = ?";
+//            }
+//            else
+//            {
+//                answer = a * b;
+//                questionText = $"{a} * {b} = ?";
+//            }
+//            break;
+
+//        default:
+//            questionText = $"Invalid Level: {Level}";
+//            trueAnswer = "";
+//            return;
+//    }
+
+//    trueAnswer = answer.ToString();
 //}
 
 
