@@ -105,13 +105,13 @@ namespace SnakeAndMath
             int chance = rnd.Next(1, 101);
 
             if (difficulty == "Easy")
-                return chance <= 40;
-
-            if (difficulty == "Medium")
                 return chance <= 60;
 
+            if (difficulty == "Medium")
+                return chance <= 80;
+
             if (difficulty == "Hard")
-                return chance <= 85;
+                return chance <= 90;
 
             return false;
         }

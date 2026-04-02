@@ -52,8 +52,9 @@ namespace SnakeAndMath
             get { return Level == "4 Player"; }
         }
 
-        private SnakeShield snakeProtection;
-        private int ConsecutiveCorrectAnswers = 0;
+        private Dictionary<Player, TimeBoost> playerTimeBoosts = new Dictionary<Player, TimeBoost>();
+        private Dictionary<Player, SnakeShield> playerShields = new Dictionary<Player, SnakeShield>();
+        private Dictionary<Player, int> playerStreaks = new Dictionary<Player, int>();
 
         public frmGameSession()
         {
@@ -358,7 +359,17 @@ namespace SnakeAndMath
 
         private void UpdateTurnUI()
         {
-            lblPlayer.Text = "Player : " + CurrentPlayer.Name;
+            lblPlayer.Text = CurrentPlayer.Name + "'s Turn :";
+            if (playerStreaks.TryGetValue(CurrentPlayer, out int streak) && streak > 0)
+                lblStreak.Text = "Current streak: " + streak;
+            else
+                lblStreak.Text = "Current streak: 0";
+            if (playerShields.ContainsKey(CurrentPlayer) && playerShields[CurrentPlayer].IsActive)
+                lblPowerUps.Text = "Power Up: Snake Shield";
+            else if (playerTimeBoosts.ContainsKey(CurrentPlayer) && playerTimeBoosts[CurrentPlayer].IsActive)
+                lblPowerUps.Text = "Power Up: Time Boost";
+            else
+                lblPowerUps.Text = "Power Up: None";
             diceLbl.Text = "";
             txtAnswer.Clear();
 
@@ -371,7 +382,15 @@ namespace SnakeAndMath
                 btnDice.Enabled = false;
                 txtAnswer.Enabled = false;
                 UpdateStatus(CurrentPlayer.Name + " is answering...");
-                StartTurnTimer(BotThinkingTime);
+                int time = BotThinkingTime;
+
+                if (playerTimeBoosts.ContainsKey(CurrentPlayer) && playerTimeBoosts[CurrentPlayer].IsActive)
+                {
+                    time *= 2;
+                    playerTimeBoosts[CurrentPlayer].Deactivate();
+                }
+
+                StartTurnTimer(time);
             }
             else
             {
@@ -379,7 +398,15 @@ namespace SnakeAndMath
                 btnDice.Enabled = false;
                 txtAnswer.Enabled = true;
                 UpdateStatus(CurrentPlayer.Name + ", answer the question first.");
-                StartTurnTimer(HumanQuestionTime);
+                int time = HumanQuestionTime;
+
+                if (playerTimeBoosts.ContainsKey(CurrentPlayer) && playerTimeBoosts[CurrentPlayer].IsActive)
+                {
+                    time *= 2;
+                    playerTimeBoosts[CurrentPlayer].Deactivate();
+                }
+
+                StartTurnTimer(time);
             }
         }
 
@@ -484,13 +511,34 @@ namespace SnakeAndMath
 
             if (lastAnswerCorrect)
             {
-                ConsecutiveCorrectAnswers++;
+                if (!playerStreaks.ContainsKey(CurrentPlayer))
+                    playerStreaks[CurrentPlayer] = 0;
 
-                if (ConsecutiveCorrectAnswers == 5)
+                playerStreaks[CurrentPlayer]++;
+
+                if ((playerStreaks[CurrentPlayer] == 5))
                 {
-                    snakeProtection = new SnakeShield();
-                    snakeProtection.Activate(CurrentPlayer, board);
-                    MessageBox.Show("Congratulations! You received a snake shield");
+                    playerStreaks[CurrentPlayer] = 0; // reset streak after reward
+
+                    // remove existing power ups first
+                    playerShields.Remove(CurrentPlayer);
+                    playerTimeBoosts.Remove(CurrentPlayer);
+
+                    int reward = rnd.Next(0, 5); // 0 or 5 (25% for snake shield)
+
+                    if (reward >= 0)
+                    {
+                        playerShields[CurrentPlayer] = new SnakeShield();
+                        playerShields[CurrentPlayer].Activate(CurrentPlayer, board);
+                        MessageBox.Show("Congratulations! You received a snake shield.");
+                    }
+                    else
+                    {
+                        playerTimeBoosts[CurrentPlayer] = new TimeBoost();
+                        playerTimeBoosts[CurrentPlayer].Activate(CurrentPlayer, board);
+                        MessageBox.Show("Congratulations! You received a time boost for the next turn!");
+                    }
+                    
                 }
                 label3.Text = "Correct answer! Now roll the dice.";
                 UpdateStatus("Correct answer! Now roll the dice.");
@@ -499,7 +547,7 @@ namespace SnakeAndMath
             else
             {
                 UpdateStatus("Wrong answer! Now roll the dice.");
-                ConsecutiveCorrectAnswers = 0;
+                playerStreaks[CurrentPlayer] = 0;
                 label3.Text = "Wrong answer! Now roll the dice.";
                 MessageBox.Show("Wrong! Press the Dice button to roll.");
             }
@@ -545,10 +593,10 @@ namespace SnakeAndMath
 
             int checkedPosition = board.CheckPosition(CurrentPlayer.Position);
 
-            if (snakeProtection != null && snakeProtection.IsActive && checkedPosition < CurrentPlayer.Position)
+            if (playerShields.ContainsKey(CurrentPlayer) && playerShields[CurrentPlayer].IsActive && checkedPosition < CurrentPlayer.Position)
             {
                 MessageBox.Show("You are protected from the snake!");
-                snakeProtection.Deactivate();
+                playerShields[CurrentPlayer].Deactivate();
                 checkedPosition = CurrentPlayer.Position;
             }
 
@@ -591,41 +639,15 @@ namespace SnakeAndMath
             base.OnFormClosing(e);
         }
 
-        private void label2_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void lblPlayer_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void lblLevel_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void pcbGameTitle_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void label3_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void lblQuestion_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void lblLevel_Click_1(object sender, EventArgs e)
-        {
-        }
-
-        private void lblToken_Click(object sender, EventArgs e)
-        {
-        }
-
+       
         private void frmGameSession_FormClosing(object sender, FormClosingEventArgs e)
         {
             formClosed = true;
+        }
+
+        private void lblStreak_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
