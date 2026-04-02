@@ -110,6 +110,8 @@ Follow the instructions below to successfully set up and run the project on your
 
 * Ensure the required Visual Studio components (as highlighted in the project documentation) are installed
 
+![WhatsApp Image 2026-04-02 at 00 21 34](https://github.com/user-attachments/assets/0bebcfe6-2732-49ed-92d4-8eee4ca884fc)
+
 ---
 
 ##  Setup Instructions
