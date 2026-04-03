@@ -214,9 +214,9 @@
             this.lblPowerUps.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.lblPowerUps.Font = new System.Drawing.Font("Arial Narrow", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblPowerUps.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.lblPowerUps.Location = new System.Drawing.Point(949, 268);
+            this.lblPowerUps.Location = new System.Drawing.Point(892, 267);
             this.lblPowerUps.Name = "lblPowerUps";
-            this.lblPowerUps.Size = new System.Drawing.Size(171, 39);
+            this.lblPowerUps.Size = new System.Drawing.Size(280, 39);
             this.lblPowerUps.TabIndex = 14;
             this.lblPowerUps.Text = "Power Up : None";
             this.lblPowerUps.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
