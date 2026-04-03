@@ -425,6 +425,42 @@ namespace SnakeAndMath
 
             lastAnswerCorrect = CurrentPlayer.SubmitAnswer("", currentQuestion.GetCorrectAnswer());
 
+            if (lastAnswerCorrect)
+            {
+                if (!playerStreaks.ContainsKey(CurrentPlayer))
+                    playerStreaks[CurrentPlayer] = 0;
+
+                playerStreaks[CurrentPlayer]++;
+
+                if (playerStreaks[CurrentPlayer] == 5)
+                {
+                    playerStreaks[CurrentPlayer] = 0;
+
+                    // remove existing power ups first
+                    playerShields.Remove(CurrentPlayer);
+                    playerTimeBoosts.Remove(CurrentPlayer);
+
+                    int reward = rnd.Next(0, 5);
+
+                    if (reward >= 0)
+                    {
+                        playerShields[CurrentPlayer] = new SnakeShield();
+                        playerShields[CurrentPlayer].Activate(CurrentPlayer, board);
+                        MessageBox.Show(CurrentPlayer.Name + " received a snake shield!");
+                    }
+                    else
+                    {
+                        playerTimeBoosts[CurrentPlayer] = new TimeBoost();
+                        playerTimeBoosts[CurrentPlayer].Activate(CurrentPlayer, board);
+                        MessageBox.Show(CurrentPlayer.Name + " received a time boost!");
+                    }
+                }
+            }
+            else
+            {
+                playerStreaks[CurrentPlayer] = 0;
+            }
+
             waitingForAnswer = false;
             waitingForDiceRoll = true;
 
