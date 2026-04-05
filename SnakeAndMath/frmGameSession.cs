@@ -526,7 +526,7 @@ namespace SnakeAndMath
 
                     int reward = rnd.Next(0, 5); // 0 or 5 (25% for snake shield)
 
-                    if (reward >= 0)
+                    if (reward == 0)
                     {
                         playerShields[CurrentPlayer] = new SnakeShield();
                         playerShields[CurrentPlayer].Activate(CurrentPlayer, board);
