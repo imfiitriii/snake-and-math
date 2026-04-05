@@ -1,6 +1,5 @@
 # Snake And Math
 
----
 
 ##  Group Members
 
@@ -13,7 +12,7 @@
 
 ---
 
-##  1.0 Project Description
+#  1.0 Project Description
 
 **Snake & Math** is an educational, multiplayer, turn-based game designed to enhance users’ mathematical problem-solving skills. The game supports up to **four players**, consisting of both real players and AI-controlled bots.
 
@@ -81,23 +80,129 @@ These classic elements are combined with educational mechanics to create a fun a
 
 ---
 
-##  2.0 System Features
+# 2.0 System Features
 
-*  Adjustable **bot difficulty levels** (affects accuracy and challenge)
-*  Flexible **player selection** (1–4 players)
-*  Interactive **power-ups system**:
-
-  * Time Freeze (reward-based)
-  * Snake Blocker (random tile-based)
-*  Progressive **question difficulty system**
-* ⏱ **Time-limited answering system**
-*  Enhanced gameplay combining **education + classic board mechanics**
+The **Snake & Math** system includes a variety of features designed to enhance both gameplay and the learning experience.
 
 ---
 
+### 🎮 Core Gameplay Features
+
+- **Turn-Based Mechanics**
+  - Players take turns answering mathematical questions
+  - Player rolls dice after answering a questions
+
+- **Movement System**
+  - ✅ Correct answer → Move forward  
+  - ❌ Incorrect answer → Move backward  
+  - ⏳ Timeout → Treated as incorrect  
+
+---
+
+### 🤖 AI & Difficulty System
+
+- **Adjustable Bot Difficulty Levels**
+  - Easy, Medium, Hard
+  - Difficulty determines the **probability of correct answers**
+
+---
+
+### 🧠 Educational Features
+
+- **Time-Limited Answering**
+  - Each player must answer within a **time limit**
+  - Encourages quick thinking and problem-solving skills
+
+---
+
+### ⚡ Power-Ups System
+
+- Players can obtain a random power-up item after **5 consecutive correct answers**
+ 
+- **Time Boost**
+  - Doubles the time limit for the next turn
+
+- **Snake Shield**
+  - Gives player immunity while landing on a snake tile
+
+---
+
+### 🐍 Classic Board Mechanics
+
+- **Snakes**
+  - Landing on a snake causes the player to move backward
+
+- **Ladders**
+  - Landing on a ladder allows the player to move forward
+
+---
+
+### 🛠 System & Technical Features
+
+- **Database Integration**
+  - Uses a `.accdb` database file to store and manage questions
+
+- **Platform Configuration**
+  - Optimized to run on **x64 architecture**
+
+- **Error Handling Support**
+  - Includes solutions for common database connection issues
+
+---
+# 3.0 Object-Oriented Programming (OOP) Concepts
+
+The **Snake & Math** project is developed using Object-Oriented Programming (OOP) principles to ensure modularity, reusability, and maintainability of the system.
+
+---
+
+## 1. Encapsulation
+
+Encapsulation is used to bind data and methods within classes while to protect attributes inside components.
+
+**Concepts used:**
+- Usage of getters and setters for properties
+- Usage of class constructors
+
+---
+
+##  2. Abstraction
+
+Abstraction is applied to hide complex implementation details and show only essential features.
+
+**Concepts used:**
+- Usage of interface IItem
+- Implementation of interface IItem in SnakeShield and TimeBoost Class
+---
+
+## 3.Inheritance
+
+Inheritance allows new classes to derive properties and behavior from existing classes.
+
+**Concepts used:**
+- A `BotPlayer` class inherited from the `Player` class
+- Bot-specific attributes and methods (difficulty, auto-answering) is added without rewriting base player features
+
+---
+
+##  4. Polymorphism
+
+Polymorphism allows methods to behave differently based on the object using them.
 
 
-#  Step-by-Step Guide to Run the Project
+**Concepts used:**
+- A method like `AnswerQuestion()` behaves differently for `Player` class and `Bot` class
+
+---
+By applying OOP concepts such as **Encapsulation, Abstraction, Inheritance, and Polymorphism**, the **Snake & Math** project achieves:
+
+- Cleaner code structure  
+- Better scalability  
+- Easier maintenance  
+- Improved development efficiency  
+
+---
+
+#  4.0 Step-by-Step Guide to Run the Project
 
 Follow the instructions below to successfully set up and run the project on your device.
 
@@ -222,5 +327,18 @@ https://www.microsoft.com/en-us/download/details.aspx?id=54920
 
 ---
 
+# 5.0 Project structure
+
+This section will describe the purpose of the files in our solution.
+
+- frmGameSession.cs : Acts as the main program file that controls the form events when a game starts
+- GameBoard.cs : GameBoard class that controls the logic for a gameboard
+- Player.cs : Contains `Player` class to define logic and `Bot` class that inherits and overrides `Player` attributes and methods
+- Items.cs : Contains `IItem` interface, `SnakeShield` and `TimeBoost` class
+- Timer.cs : Contains `Timer` class that controls player timer
+- dice.cs : Contains `Dice` class
+- Question.cs : Contains `Question` class
+
+---
 
 
